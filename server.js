@@ -83,7 +83,7 @@ function settleMaturedInvestments(data) {
       data.investmentBalance = Math.max(0, Number(data.investmentBalance || 0) - Number(inv.amount || 0));
       data.mainBalance += Number(inv.amount || 0) + Number(inv.profit || 0);
       data.investmentProfit += Number(inv.profit || 0);
-      data.activity.push(activity('Demo Investment Matured', Number(inv.amount || 0) + Number(inv.profit || 0), 'Completed', 'Capital and 30% profit returned after the 24-hour period.'));
+      data.activity.push(activity('Investment Matured', Number(inv.amount || 0) + Number(inv.profit || 0), 'Completed', 'Capital and 30% profit returned after the 24-hour period.'));
       changed = true;
     }
   }
@@ -287,20 +287,20 @@ app.post('/api/test/withdraw', auth, async (req,res) => {
   const withdrawal = { amount, bank, recipientName, iban, mobile, email };
   d.activity.push(Object.assign(activity('Withdrawal',-amount,'Pending','Your withdrawal request is pending.'), { withdrawal }));
   await save(req);
-  res.json({ ok:true, message:'Your withdrawal request is pending processing.' });
+  res.json({ ok:true, message:'Your withdrawal request is pending.' });
 });
 
 app.post('/api/test/invest', auth, async (req,res) => {
   const amount = Number(req.body?.amount); req.user.data ??= defaultData(); const d=req.user.data;
   if (!Number.isFinite(amount)||amount<=0) return res.status(400).json({ message:'Enter a valid amount.' });
-  if (amount>d.mainBalance) return res.status(400).json({ message:'Simulation amount exceeds demo wallet balance.' });
+  if (amount>d.mainBalance) return res.status(400).json({ message:'amount exceeds wallet balance.' });
   const profit = Math.round(amount*0.30*100)/100;
   const startedAt = new Date().toISOString(); const maturesAt = new Date(Date.now()+24*60*60*1000).toISOString();
   const inv = { id:crypto.randomUUID(), amount, profit, startedAt, maturesAt, status:'active' };
   d.mainBalance -= amount; d.investmentBalance += amount; d.investments.push(inv);
-  d.activity.push(activity('Demo Investment Started',-amount,'Active','30% demo return scheduled after 24 hours.'));
+  d.activity.push(activity('Investment Started',-amount,'Active','30% return scheduled after 24 hours.'));
   await save(req);
-  res.json({ ok:true, investment:inv, message:'Demo investment started. Capital plus a 30% simulated profit will mature after 24 hours.' });
+  res.json({ ok:true, investment:inv, message:'investment started. Capital plus a 30% profit will mature after 24 hours.' });
 });
 
 app.use(express.static(__dirname));
