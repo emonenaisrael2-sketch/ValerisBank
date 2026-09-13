@@ -83,7 +83,7 @@ function settleMaturedInvestments(data) {
       data.investmentBalance = Math.max(0, Number(data.investmentBalance || 0) - Number(inv.amount || 0));
       data.mainBalance += Number(inv.amount || 0) + Number(inv.profit || 0);
       data.investmentProfit += Number(inv.profit || 0);
-      data.activity.push(activity('Demo Investment Matured', Number(inv.amount || 0) + Number(inv.profit || 0), 'Completed', 'Capital and 30% demo profit returned after the 24-hour simulation period.'));
+      data.activity.push(activity('Demo Investment Matured', Number(inv.amount || 0) + Number(inv.profit || 0), 'Completed', 'Capital and 30% profit returned after the 24-hour period.'));
       changed = true;
     }
   }
@@ -177,7 +177,7 @@ app.post('/api/test/verification-code', auth, (req,res) => {
   const code = crypto.randomInt(100000,1000000).toString();
   codes.set(req.userId,{ code, expires:Date.now()+300000 });
   console.log(`[VALERIS DEMO OTP] user=${req.userId} code=${code} expires=5m`);
-  res.json({ ok:true, message:'Demo code generated. Check the server/Render logs.' });
+  res.json({ ok:true, message:'code generated.' });
 });
 function checkCode(userId, code) {
   const record = codes.get(userId);
@@ -189,8 +189,8 @@ app.post('/api/test/fund', auth, async (req,res) => {
   if (!Number.isFinite(amount) || amount<=0) return res.status(400).json({ message:'Enter a valid funding amount.' });
   if (!checkCode(req.userId,req.body?.code)) return res.status(400).json({ message:'Invalid or expired verification code.' });
   req.user.data ??= defaultData(); req.user.data.mainBalance += amount;
-  req.user.data.activity.push(activity('Demo Wallet Funding',amount,'Completed','Test funding only'));
-  await save(req); res.json({ ok:true, message:`Demo funding verified. £${amount.toFixed(2)} added.` });
+  req.user.data.activity.push(activity('Wallet Funding',amount,'Completed'));
+  await save(req); res.json({ ok:true, message:`funding verified. £${amount.toFixed(2)} added.` });
 });
 
 function dayKey(date = new Date()) {
@@ -239,16 +239,16 @@ app.post('/api/test/fund-task', auth, async (req,res) => {
     req.user.data.dailyTaskCompletions.fundYourWallet = new Date().toISOString();
 
     req.user.data.activity.push(
-      activity('Demo Wallet Funding', amount, 'Completed', 'Test funding only.')
+      activity('Wallet Funding', amount, 'Completed')
     );
     req.user.data.activity.push(
-      activity('Task Reward: Fund Your Wallet', task.reward, 'Completed', `Funding task completed with £${amount.toFixed(2)} demo funding.`)
+      activity('Task Reward: Fund Your Wallet', task.reward, 'Completed', `Funding task completed with £${amount.toFixed(2)} funding.`)
     );
 
     await save(req);
     res.json({
       ok:true,
-      message:`Demo funding verified. £${amount.toFixed(2)} added and £${task.reward.toFixed(2)} task reward credited.`
+      message:`funding verified. £${amount.toFixed(2)} added and £${task.reward.toFixed(2)} task reward credited.`
     });
   } catch (error) {
     console.error('Fund Your Wallet task error:', error);
@@ -266,8 +266,8 @@ app.post('/api/test/tasks/:id/submit', auth, async (req,res) => {
   if (!validateTask(id,req.body)) return res.status(400).json({ message:'Please complete the activity correctly before claiming the reward.' });
   d.dailyTaskCompletions[id] = new Date().toISOString();
   d.taskBalance += task.reward; d.taskEarnings += task.reward; d.completedTasks += 1;
-  d.activity.push(activity('Task Reward: '+task.title,task.reward,'Completed','Participative demo task completed.'));
-  await save(req); res.json({ ok:true, message:`Task completed. £${task.reward.toFixed(2)} demo reward added.` });
+  d.activity.push(activity('Task Reward: '+task.title,task.reward,'Completed','Participative task completed.'));
+  await save(req); res.json({ ok:true, message:`Task completed. £${task.reward.toFixed(2)} reward added.` });
 });
 
 app.post('/api/test/withdraw', auth, async (req,res) => {
@@ -281,11 +281,11 @@ app.post('/api/test/withdraw', auth, async (req,res) => {
   const d=req.user.data, total=d.mainBalance+d.taskBalance+d.investmentProfit;
   if (!Number.isFinite(amount)||amount<=0) return res.status(400).json({ message:'Enter a valid withdrawal amount.' });
   if (!bank||!recipientName||!iban||!mobile||!email) return res.status(400).json({ message:'Please complete all withdrawal details.' });
-  if (amount>total) return res.status(400).json({ message:'Withdrawal amount exceeds eligible demo balance.' });
+  if (amount>total) return res.status(400).json({ message:'Withdrawal amount exceeds eligible balance.' });
   let remaining=amount;
   for (const key of ['mainBalance','taskBalance','investmentProfit']) { const take=Math.min(Number(d[key]||0),remaining); d[key]-=take; remaining-=take; if(remaining<=0) break; }
   const withdrawal = { amount, bank, recipientName, iban, mobile, email };
-  d.activity.push(Object.assign(activity('Demo Withdrawal',-amount,'Pending','Your withdrawal request is pending processing.'), { withdrawal }));
+  d.activity.push(Object.assign(activity('Withdrawal',-amount,'Pending','Your withdrawal request is pending.'), { withdrawal }));
   await save(req);
   res.json({ ok:true, message:'Your withdrawal request is pending processing.' });
 });
