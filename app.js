@@ -18,7 +18,7 @@ const TASKS = [
 ];
 const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmt=n=>'£'+Number(n||0).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
-const logo = `<img class="brand-mark" src="assets/valerisbank-logo.svg" alt="ValerisBank logo"><span>ValerisBank<small>EARN AND GROW</small></span>`;
+const logo = `<img class="brand-mark" src="assets/valerisbank-logo.svg" alt="ValerisBank logo"><span>ValerisBank <br> <small>EARN AND GROW</small></span>`;
 async function api(path,opt={}){
   const headers={'Content-Type':'application/json',...(opt.headers||{})};
   if(S.token) headers.Authorization='Bearer '+S.token;
