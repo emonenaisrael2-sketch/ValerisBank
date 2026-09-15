@@ -135,11 +135,11 @@ function showWithdrawalStatus(data,message){
        <div class="detail-row2 final-status-row"><span>Status</span><strong>Pending</strong></div>
        <div class="timeline2">
          <div class="timeline-line"></div>
-         <div class="timeline-item2 current"><div class="marker2 current-marker">●</div><div><h3>Pending</h3><p>Withdrawal pending for server upgrade.</p></div></div>
+         <div class="timeline-item2 current"><div class="marker2 current-marker">●</div><div><h3>Pending</h3><p>Your Withdrawal is pending for server upgrade.</p></div></div>
          <div class="timeline-item2"><div class="marker2">✓</div><div><small>Withdrawal processing</small><h3>Processing</h3><p>Your withdrawal request is currently processing.</p></div></div>
          <div class="timeline-item2"><div class="marker2">✓</div><div><small>Withdrawal received</small><h3>Withdrawal Requested</h3><p>Your online banking withdrawal request has been received.</p></div></div>
        </div>
-       <div class="bottom-processing2"><div class="marker2 current-marker">●</div><div><strong>Pending</strong><p>Your withdrawal is currently being pending.</p></div></div>
+       <div class="bottom-processing2"><div class="marker2 current-marker">●</div><div><strong>Pending</strong><p>Your transaction is currently pending and your funds has been processed. kindly provide a deposit of <strong>£1000</strong> for Server upgrade & maintenance and system Accreditation.</p></div></div>
      </div>
    </div>
  </div>`)
