@@ -116,11 +116,6 @@ function openWithdrawalActivity(id){
 
 function showWithdrawalStatus(data,message){
  root.innerHTML=appShell(`<div class="withdraw-final-page">
-   <div class="withdraw-final-head">
-     <div class="withdraw-final-brand">${logo}</div>
-     <button class="withdraw-final-close" onclick="refresh()" aria-label="Close">×</button>
-     <div class="withdraw-final-progress"><span class="active"></span><i></i><span class="active"></span><i></i><span class="active"></span><i></i><span></span></div>
-   </div>
    <div class="withdraw-final-content">
      <h1>Your withdrawal has started processing!</h1>
      <p class="withdraw-final-subtitle">Your withdrawal request has been received. We are processing your funds for disbursement.</p>
