@@ -1,5 +1,5 @@
 {
-  "name": "valerisbank-demo",
+  "name": "valerisbank",
   "version": "1.0.0",
   "private": true,
   "main": "server.js",
